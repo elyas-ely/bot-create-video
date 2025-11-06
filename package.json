@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "start": "node create-video.js",
-    "dev": "nodemon create-video.js"
+    "dev": "nodemon create-video.js",
+    "images": "nodemon imagesHandler.js"
   },
   "keywords": [],
   "author": "",
@@ -15,6 +16,7 @@
     "nodemon": "^3.1.10"
   },
   "dependencies": {
+    "axios": "^1.13.2",
     "child_process": "^1.0.2",
     "fs": "^0.0.1-security"
   }
