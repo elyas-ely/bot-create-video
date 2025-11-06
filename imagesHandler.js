@@ -1,12 +1,14 @@
 import { fetchImageUrls } from './getImagesUrls.js'
 import { downloadImages } from './downloadImages.js'
 import { createVideoFromImages } from './create-video.js'
+import { clearChunks } from './clearChunks.js'
 
 // --------------------------------------
 // Example usage
 // --------------------------------------
 export async function imagesHandler() {
   await createVideoFromImages()
+  // clearChunks()
   console.log('🎉 All done!')
 }
 
