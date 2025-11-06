@@ -1,6 +1,9 @@
 # Dependencies
 node_modules/
+
+
 images/
+output.mp4
 
 # Environment variables
 .env
