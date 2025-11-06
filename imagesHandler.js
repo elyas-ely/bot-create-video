@@ -1,15 +1,25 @@
 import { fetchImageUrls } from './getImagesUrls.js'
 import { downloadImages } from './downloadImages.js'
+import { createVideoFromImages } from './create-video.js'
 
 // --------------------------------------
 // Example usage
 // --------------------------------------
 export async function imagesHandler() {
-  const urls = await fetchImageUrls('nature', 2)
-  console.log('✅ Image URLs fetched:', urls.length)
-
-  await downloadImages(urls)
+  await createVideoFromImages()
   console.log('🎉 All done!')
 }
 
-// imagesHandler()
+// export async function imagesHandler() {
+//   const urls = await fetchImageUrls('nature', 50)
+
+//   if (urls.length > 0) {
+//     await downloadImages(urls)
+//     await createVideoFromImages()
+//     console.log('🎉 All done!')
+//   } else {
+//     console.log('❌ No image URLs fetched')
+//   }
+// }
+
+imagesHandler()

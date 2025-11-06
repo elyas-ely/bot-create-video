@@ -43,5 +43,5 @@ export async function downloadImages(urls) {
     count++
   }
 
-  console.log('🎉 All downloads finished!')
+  console.log('✅ ---- All downloads finished!')
 }
