@@ -5,49 +5,60 @@ import { promisify } from 'util'
 
 const execAsync = promisify(exec)
 
-export async function createVideoFromImages() {
-  const imagesFolder = 'images'
-  const audioFile = 'public/music.mp3'
-  const outputFile = 'output.mp4'
-  const videoDuration = 30
-  const fadeDuration = 1
+async function createVideoChunk(imagePath, chunkIndex, chunkFolder = 'chunks') {
+  if (!fs.existsSync(chunkFolder)) fs.mkdirSync(chunkFolder)
 
-  let images = fs
+  const outputFile = path.join(chunkFolder, `chunk_${chunkIndex}.mp4`)
+  const duration = 5 // each image stays 5 seconds
+
+  const cmd = `ffmpeg -y -loop 1 -i "${imagePath}" -t ${duration} -c:v libx264 -pix_fmt yuv420p -an "${outputFile}"`
+
+  console.log(`🚀 Creating chunk ${chunkIndex} → ${imagePath}`)
+  await execAsync(cmd)
+  console.log(`✅ Chunk ${chunkIndex} created → ${outputFile}`)
+
+  return outputFile
+}
+
+async function createAllChunks(imagesFolder = 'images') {
+  const images = fs
     .readdirSync(imagesFolder)
     .filter((f) => /\.(jpe?g|png)$/i.test(f))
     .map((f) => path.join(imagesFolder, f))
 
-  if (images.length < 2) {
-    console.error('❌ Need at least 2 images for crossfade.')
-    return
+  if (images.length < 1) {
+    console.error('❌ Need at least 1 image.')
+    return []
   }
 
-  let inputs = ''
-  let filter = ''
-  const numImages = images.length
-
-  images.forEach((img) => {
-    inputs += `-loop 1 -t ${videoDuration} -i "${img}" `
-  })
-
-  let offset = videoDuration / numImages
-  for (let i = 0; i < numImages - 1; i++) {
-    const in1 = i === 0 ? `[${i}:v]` : `[v${i}]`
-    const in2 = `[${i + 1}:v]`
-    const out = `[v${i + 1}]`
-    filter += `${in1}${in2}xfade=transition=fade:duration=${fadeDuration}:offset=${offset}${out};`
-    offset += videoDuration / numImages
+  const chunks = []
+  for (let i = 0; i < images.length; i++) {
+    const chunkVideo = await createVideoChunk(images[i], i + 1)
+    chunks.push(chunkVideo)
   }
 
-  filter = filter.slice(0, -1)
+  return chunks
+}
 
-  const cmd = `ffmpeg -y ${inputs}-i "${audioFile}" -filter_complex "${filter}" -map "[v${numImages - 1}]" -map ${numImages}:a -t ${videoDuration} -c:v libx264 -pix_fmt yuv420p -c:a aac -shortest "${outputFile}"`
+async function joinChunksWithMusic(
+  chunkFiles,
+  finalOutput = 'final_video.mp4',
+  audioFile = 'public/music.mp3'
+) {
+  const listFile = 'chunks.txt'
+  fs.writeFileSync(listFile, chunkFiles.map((f) => `file '${f}'`).join('\n'))
 
-  try {
-    console.log('🚀 Running FFmpeg...')
-    const { stdout, stderr } = await execAsync(cmd)
-    console.log(`✅ Video created successfully → ${outputFile}`)
-  } catch (err) {
-    console.error('❌ FFmpeg Error:', err)
+  const cmd = `ffmpeg -y -f concat -safe 0 -i "${listFile}" -i "${audioFile}" -c:v copy -c:a aac -shortest "${finalOutput}"`
+  console.log('🚀 Joining all chunks and adding music...')
+  await execAsync(cmd)
+  console.log(`✅ Final video created → ${finalOutput}`)
+
+  fs.unlinkSync(listFile)
+}
+
+export async function createVideoFromImages() {
+  const chunkFiles = await createAllChunks()
+  if (chunkFiles.length > 0) {
+    await joinChunksWithMusic(chunkFiles)
   }
 }

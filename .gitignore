@@ -4,6 +4,9 @@ node_modules/
 
 images/
 output.mp4
+chunks/
+final_video.mp4
+images-copy/
 
 # Environment variables
 .env
