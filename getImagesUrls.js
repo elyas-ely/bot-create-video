@@ -1,6 +1,10 @@
+import 'dotenv/config'
 import axios from 'axios'
 
-const ACCESS_KEY = '8jmv0Hc-cKqwSE1AYXDDswq-RJpGKLrgHKyvNXRtmhs'
+const ACCESS_KEY = process.env.UNSPLASH_ACCESS_KEY
+if (!ACCESS_KEY) {
+  throw new Error('Missing UNSPLASH_ACCESS_KEY in environment variables (.env)')
+}
 const perPage = 30
 
 export async function fetchImageUrls(query, totalImages) {
