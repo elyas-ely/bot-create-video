@@ -24,7 +24,7 @@ import { uploadVideo } from './upload.js'
 // }
 
 export async function imagesHandler() {
-  const urls = await fetchImageUrls('nature', 6)
+  const urls = await fetchImageUrls('nature', 4)
 
   if (urls.length > 0) {
     await downloadImages(urls)
