@@ -75,6 +75,7 @@ export async function uploadVideo() {
       'YouTube URL:',
       `https://www.youtube.com/watch?v=${res.data.id}`
     )
+    pr
   } catch (error) {
     console.error('Upload failed:', error)
   }

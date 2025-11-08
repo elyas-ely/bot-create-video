@@ -6,6 +6,24 @@ import { clearChunks } from './clearChunks.js'
 
 const execAsync = promisify(exec)
 
+// ----------------- ENVIRONMENT SETUP -----------------
+const isProduction = process.env.NODE_ENV === 'production'
+
+// Use full paths in production (VPS), default 'ffmpeg' locally
+const FFMPEG = isProduction ? '/usr/local/bin/ffmpeg' : 'ffmpeg'
+const FFPROBE = isProduction ? '/usr/local/bin/ffprobe' : 'ffprobe'
+
+// ----------------- CHECK FFmpeg EXISTS -----------------
+async function checkFFmpeg() {
+  try {
+    await execAsync(`${FFMPEG} -version`)
+    await execAsync(`${FFPROBE} -version`)
+  } catch (err) {
+    console.error(`❌ FFmpeg/FFprobe not found at ${FFMPEG} or ${FFPROBE}`)
+    process.exit(1)
+  }
+}
+
 // ----------------- CREATE VIDEO CHUNK (one image) -----------------
 async function createVideoChunk(imagePath, chunkIndex, chunkFolder = 'chunks') {
   if (!fs.existsSync(chunkFolder)) fs.mkdirSync(chunkFolder)
@@ -13,7 +31,7 @@ async function createVideoChunk(imagePath, chunkIndex, chunkFolder = 'chunks') {
   const outputFile = path.join(chunkFolder, `chunk_${chunkIndex}.mp4`)
   const duration = 5
 
-  const cmd = `ffmpeg -y -loop 1 -i "${imagePath}" -t ${duration} -c:v libx264 -pix_fmt yuv420p -an "${outputFile}"`
+  const cmd = `${FFMPEG} -y -loop 1 -i "${imagePath}" -t ${duration} -c:v libx264 -pix_fmt yuv420p -an "${outputFile}"`
   console.log(`🚀 Creating chunk ${chunkIndex} → ${imagePath}`)
   await execAsync(cmd)
   console.log(`✅ Chunk ${chunkIndex} created → ${outputFile}`)
@@ -53,12 +71,12 @@ async function joinChunksWithMusic(
 
   // Get total video duration
   const { stdout: durationStdout } = await execAsync(
-    `ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 "${chunkFiles[chunkFiles.length - 1]}"`
+    `${FFPROBE} -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 "${chunkFiles[chunkFiles.length - 1]}"`
   )
   const videoDuration = parseFloat(durationStdout) * chunkFiles.length // each chunk 5s
 
   // Loop the music to match video duration
-  const cmd = `ffmpeg -y -f concat -safe 0 -i "${listFile}" -stream_loop -1 -i "${audioFile}" -c:v copy -c:a aac -t ${videoDuration} "${finalOutput}"`
+  const cmd = `${FFMPEG} -y -f concat -safe 0 -i "${listFile}" -stream_loop -1 -i "${audioFile}" -c:v copy -c:a aac -t ${videoDuration} "${finalOutput}"`
 
   console.log('🚀 Joining all chunks and adding music (looped)...')
   await execAsync(cmd)
@@ -69,6 +87,8 @@ async function joinChunksWithMusic(
 
 // ----------------- RUN EVERYTHING -----------------
 export async function createVideoFromImages() {
+  await checkFFmpeg() // Ensure ffmpeg exists
+
   const chunkFiles = await createAllChunks()
   if (chunkFiles.length > 0) {
     await joinChunksWithMusic(chunkFiles)
