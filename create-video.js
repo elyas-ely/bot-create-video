@@ -3,13 +3,15 @@ import fs from 'fs'
 import path from 'path'
 import { promisify } from 'util'
 import { clearChunks } from './clearChunks.js'
+import dotenv from 'dotenv'
+dotenv.config()
 
 const execAsync = promisify(exec)
 
 // ----------------- ENVIRONMENT SETUP -----------------
 const isProduction = process.env.NODE_ENV === 'production'
 
-console.log('isProduction')
+console.log('isProduction', process.env.NODE_ENV)
 
 // Use full paths in production (VPS), default 'ffmpeg' locally
 const FFMPEG = isProduction ? '/usr/local/bin/ffmpeg' : 'ffmpeg'
