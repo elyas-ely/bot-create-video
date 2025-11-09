@@ -18,6 +18,8 @@
     "axios": "^1.13.2",
     "child_process": "^1.0.2",
     "dotenv": "^16.4.5",
+    "ffprobe-static": "^3.1.0",
+    "ffmpeg-static": "4.2.6",
     "fs": "^0.0.1-security",
     "googleapis": "^165.0.0"
   }

@@ -5,16 +5,18 @@ import { promisify } from 'util'
 import { clearChunks } from './clearChunks.js'
 import 'dotenv/config'
 
+import ffmpegPath from 'ffmpeg-static'
+import ffprobePath from 'ffprobe-static'
+
 const execAsync = promisify(exec)
 
 // ----------------- ENVIRONMENT SETUP -----------------
 const isProduction = process.env.NODE_ENV === 'production'
 
-console.log('isProduction', process.env.NODE_ENV)
+// console.log('isProduction', process.env.NODE_ENV)
 
-// Use full paths in production (VPS), default 'ffmpeg' locally
-const FFMPEG = 'ffmpeg'
-const FFPROBE = 'ffprobe'
+const FFMPEG = ffmpegPath
+const FFPROBE = ffprobePath
 
 // ----------------- CHECK FFmpeg EXISTS -----------------
 async function checkFFmpeg() {
