@@ -9,6 +9,8 @@ const execAsync = promisify(exec)
 // ----------------- ENVIRONMENT SETUP -----------------
 const isProduction = process.env.NODE_ENV === 'production'
 
+console.log('isProduction')
+
 // Use full paths in production (VPS), default 'ffmpeg' locally
 const FFMPEG = isProduction ? '/usr/local/bin/ffmpeg' : 'ffmpeg'
 const FFPROBE = isProduction ? '/usr/local/bin/ffprobe' : 'ffprobe'
