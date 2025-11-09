@@ -3,8 +3,7 @@ import fs from 'fs'
 import path from 'path'
 import { promisify } from 'util'
 import { clearChunks } from './clearChunks.js'
-import dotenv from 'dotenv'
-dotenv.config()
+import 'dotenv/config'
 
 const execAsync = promisify(exec)
 
