@@ -13,8 +13,8 @@ const isProduction = process.env.NODE_ENV === 'production'
 console.log('isProduction', process.env.NODE_ENV)
 
 // Use full paths in production (VPS), default 'ffmpeg' locally
-const FFMPEG = isProduction ? '/usr/local/bin/ffmpeg' : 'ffmpeg'
-const FFPROBE = isProduction ? '/usr/local/bin/ffprobe' : 'ffprobe'
+const FFMPEG = 'ffmpeg'
+const FFPROBE = 'ffprobe'
 
 // ----------------- CHECK FFmpeg EXISTS -----------------
 async function checkFFmpeg() {
