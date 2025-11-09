@@ -61,7 +61,7 @@ export async function uploadVideo() {
       part: 'snippet,status',
       requestBody: {
         snippet: {
-          title: 'My Relaxing Video',
+          title: 'My Relaxing Video VPS',
           description: 'This video was uploaded automatically using Node.js 🤖',
           tags: ['relaxing', 'ai', 'nature'],
         },
@@ -75,7 +75,6 @@ export async function uploadVideo() {
       'YouTube URL:',
       `https://www.youtube.com/watch?v=${res.data.id}`
     )
-    pr
   } catch (error) {
     console.error('Upload failed:', error)
   }
