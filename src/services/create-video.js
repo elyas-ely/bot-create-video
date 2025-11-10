@@ -2,7 +2,7 @@ import { exec } from 'child_process'
 import fs from 'fs'
 import path from 'path'
 import { promisify } from 'util'
-import { clearChunks } from './clearChunks.js'
+import { clearChunks } from './utils/clearChunks.js'
 import 'dotenv/config'
 
 const execAsync = promisify(exec)

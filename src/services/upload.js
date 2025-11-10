@@ -5,7 +5,7 @@ import readline from 'readline'
 
 const SCOPES = ['https://www.googleapis.com/auth/youtube.upload']
 const TOKEN_PATH = 'token.json'
-const VIDEO_FILE = 'final_video.mp4'
+const VIDEO_FILE = 'public/final/final_video.mp4'
 
 async function authorize() {
   const credentials = JSON.parse(fs.readFileSync('credentials.json'))

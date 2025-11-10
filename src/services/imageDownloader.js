@@ -3,7 +3,7 @@ import fs from 'fs'
 import path from 'path'
 import https from 'https'
 
-const folder = './images'
+const folder = './public/images'
 
 if (!fs.existsSync(folder)) fs.mkdirSync(folder)
 

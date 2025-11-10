@@ -1,12 +1,10 @@
 # Dependencies
 node_modules/
 
-
-images/
-output.mp4
-chunks/
-final_video.mp4
 images-copy/
+public/images/
+public/chunks/
+public/final/
 
 # Environment variables
 .env
