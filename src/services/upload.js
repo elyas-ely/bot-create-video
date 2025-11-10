@@ -2,13 +2,21 @@
 import fs from 'fs'
 import { google } from 'googleapis'
 import readline from 'readline'
+import 'dotenv/config'
+
+const isProduction = process.env.NODE_ENV === 'production'
+console.log('isProduction:', isProduction)
 
 const SCOPES = ['https://www.googleapis.com/auth/youtube.upload']
-const TOKEN_PATH = 'token.json'
+const TOKEN_PATH = isProduction ? '/app/token.json' : 'token.json'
 const VIDEO_FILE = 'public/final/final_video.mp4'
 
+const credentialsPath = isProduction
+  ? '/app/credentials.json'
+  : 'credentials.json'
+
 async function authorize() {
-  const credentials = JSON.parse(fs.readFileSync('credentials.json'))
+  const credentials = JSON.parse(fs.readFileSync(credentialsPath))
   const { client_secret, client_id, redirect_uris } = credentials.installed
   const oAuth2Client = new google.auth.OAuth2(
     client_id,
