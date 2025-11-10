@@ -29,7 +29,7 @@
     # -----------------------------
     # Copy Bun lockfile and package.json
     # -----------------------------
-    COPY bun.lockb package.json ./
+    COPY bun.lock package.json ./
     
     # -----------------------------
     # Install dependencies with Bun
