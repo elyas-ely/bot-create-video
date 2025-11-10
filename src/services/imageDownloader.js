@@ -5,16 +5,15 @@ import https from 'https'
 
 const folder = './public/images'
 
-if (!fs.existsSync(folder)) fs.mkdirSync(folder)
-
 // https agent to force IPv4 + keep-alive
 const agent = new https.Agent({ keepAlive: true, family: 4 })
 
-export async function downloadImages(urls) {
+export async function downloadImages(urls, concurrent = 10) {
   let count = 1
 
-  for (const url of urls) {
-    const filename = path.join(folder, `image_${count}.jpg`)
+  // Helper to download a single image
+  const downloadSingle = async (url, index) => {
+    const filename = path.join(folder, `image_${index + 1}.jpg`)
 
     try {
       const res = await axios.get(url, {
@@ -24,7 +23,7 @@ export async function downloadImages(urls) {
       })
 
       fs.writeFileSync(filename, res.data)
-      console.log(`✅ Downloaded (${count}/${urls.length}) → ${filename}`)
+      console.log(`✅ Downloaded (${index + 1}/${urls.length}) → ${filename}`)
     } catch (err) {
       console.log(`❌ Failed to download ${url}, retrying...`)
       try {
@@ -39,8 +38,12 @@ export async function downloadImages(urls) {
         console.log(`⚠️ Could not download ${url}`)
       }
     }
+  }
 
-    count++
+  // Split into batches of `concurrent`
+  for (let i = 0; i < urls.length; i += concurrent) {
+    const batch = urls.slice(i, i + concurrent)
+    await Promise.all(batch.map((url, idx) => downloadSingle(url, i + idx)))
   }
 
   console.log('✅ ---- All downloads finished!')

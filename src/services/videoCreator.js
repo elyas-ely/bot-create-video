@@ -8,7 +8,5 @@ export async function createVideoFromImages() {
   const chunkFiles = await createAllChunks()
   const finalVideoPath = await joinChunksWithMusic(chunkFiles)
 
-  emptyChunksFolder()
-
   return finalVideoPath
 }

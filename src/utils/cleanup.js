@@ -16,3 +16,7 @@ export function emptyChunksFolder() {
 export function emptyImagesFolder() {
   emptyFolder('public/images')
 }
+
+export function emptyFinalFolder() {
+  emptyFolder('public/final')
+}
