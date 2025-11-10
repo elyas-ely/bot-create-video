@@ -22,6 +22,8 @@ export async function generateVideoWorkflow() {
     await downloadImages(urls)
     await createVideoFromImages()
     await uploadVideo()
+  } catch (error) {
+    console.error('Error generating video:', error)
   } finally {
     emptyChunksFolder()
     emptyImagesFolder()
