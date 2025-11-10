@@ -5,7 +5,7 @@
   "main": "src/index.js",
   "type": "module",
   "scripts": {
-    "start": "node src/index.js",
+    "start": "bun src/index.js",
     "dev": "nodemon src/index.js"
   },
   "keywords": [],
@@ -19,8 +19,6 @@
     "axios": "^1.13.2",
     "child_process": "^1.0.2",
     "dotenv": "^16.6.1",
-    "ffmpeg-static": "4.2.6",
-    "ffprobe-static": "^3.1.0",
     "fs": "^0.0.1-security",
     "googleapis": "^165.0.0"
   }

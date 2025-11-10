@@ -2,13 +2,11 @@ import fs from 'fs'
 import path from 'path'
 import { promisify } from 'util'
 import { exec } from 'child_process'
-import ffmpegStatic from 'ffmpeg-static'
-import ffprobeStatic from 'ffprobe-static'
 
 const execAsync = promisify(exec)
 
-const FFMPEG = ffmpegStatic
-const FFPROBE = ffprobeStatic
+const FFMPEG = 'ffmpeg'
+const FFPROBE = 'ffprobe'
 const CHUNK_DURATION = 5 // seconds
 
 export async function createVideoChunk(
