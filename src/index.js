@@ -1,9 +1,12 @@
 import { generateVideoWorkflow } from './workflows/generateVideo.js'
 
-try {
-  await generateVideoWorkflow()
-  process.exit(0)
-} catch (err) {
-  console.error(err)
-  process.exit(1)
+async function start() {
+  try {
+    await generateVideoWorkflow()
+    console.log('✅ Done')
+  } catch (err) {
+    console.error('❌ Error:', err)
+  }
 }
+
+start()
