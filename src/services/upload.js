@@ -69,7 +69,7 @@ export async function uploadVideo() {
       part: 'snippet,status',
       requestBody: {
         snippet: {
-          title: 'My Relaxing Video VPS',
+          title: `My Relaxing Video ${isProduction ? 'VPS' : 'Local'}`,
           description: 'This video was uploaded automatically using Node.js 🤖',
           tags: ['relaxing', 'ai', 'nature'],
         },
