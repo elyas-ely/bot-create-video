@@ -20,8 +20,8 @@ export async function generateVideoWorkflow() {
 
   try {
     await downloadImages(urls)
-    // await createVideoFromImages()
-    // await uploadVideo()
+    await createVideoFromImages()
+    await uploadVideo()
   } catch (error) {
     console.error('Error generating video:', error)
   } finally {
