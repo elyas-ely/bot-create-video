@@ -6,7 +6,7 @@ import https from 'https'
 const folder = './public/images'
 const agent = new https.Agent({ keepAlive: true, family: 4 })
 
-export async function downloadImages(urls, concurrency = 3) {
+export async function downloadImages(urls, concurrency = 1) {
   let index = 0
 
   const worker = async () => {
