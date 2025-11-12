@@ -45,6 +45,11 @@
     # Set environment variables
     # -----------------------------
     ENV NODE_ENV=production
+
+    # -----------------------------
+    # Expose the app port
+    # -----------------------------
+    EXPOSE 7426
     
     # -----------------------------
     # Command to run your app
