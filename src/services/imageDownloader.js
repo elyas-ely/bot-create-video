@@ -18,7 +18,7 @@ export async function downloadImages(urls, concurrency = 1) {
       for (let attempt = 1; attempt <= 3; attempt++) {
         try {
           const res = await axios.get(url, {
-            responseType: 'arraybuffer',
+            responseType: 'stream',
             timeout: 30000,
             httpsAgent: agent,
           })
