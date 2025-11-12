@@ -23,7 +23,7 @@ export async function downloadImages(urls, concurrency = 1) {
             httpsAgent: agent,
           })
           await fs.writeFile(filename, res.data)
-          console.log(`✅ Downloaded (${i + 1}/${urls.length}) → ${filename}`)
+          // console.log(`✅ Downloaded (${i + 1}/${urls.length}) → ${filename}`)
           break
         } catch (err) {
           console.log(`❌ Attempt ${attempt} failed for ${url}: ${err.message}`)
