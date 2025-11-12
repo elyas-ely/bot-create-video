@@ -1,18 +1,11 @@
 {
   "name": "test-video-create-node",
   "version": "1.0.0",
-  "description": "",
+  "author": "",
   "main": "src/index.js",
-  "type": "module",
   "scripts": {
     "start": "bun src/index.js",
-    "dev": "nodemon src/index.js"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "devDependencies": {
-    "nodemon": "^3.1.10"
+    "dev": "bun --watch src/index.js"
   },
   "dependencies": {
     "@types/ffmpeg-static": "^5.1.0",
@@ -21,5 +14,9 @@
     "dotenv": "^16.6.1",
     "fs": "^0.0.1-security",
     "googleapis": "^165.0.0"
-  }
+  },
+  "description": "",
+  "keywords": [],
+  "license": "ISC",
+  "type": "module"
 }
