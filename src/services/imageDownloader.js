@@ -1,52 +1,39 @@
 import axios from 'axios'
-import fs from 'fs'
+import fs from 'fs/promises'
 import path from 'path'
 import https from 'https'
 
 const folder = './public/images'
-
-// https agent to force IPv4 + keep-alive
 const agent = new https.Agent({ keepAlive: true, family: 4 })
 
-export async function downloadImages(urls, concurrent = 10) {
-  // return console.log('2 - all images fetched')
+export async function downloadImages(urls, concurrency = 3) {
+  let index = 0
 
-  let count = 1
+  const worker = async () => {
+    while (index < urls.length) {
+      const i = index++
+      const url = urls[i]
+      const filename = path.join(folder, `image_${i + 1}.jpg`)
 
-  // Helper to download a single image
-  const downloadSingle = async (url, index) => {
-    const filename = path.join(folder, `image_${index + 1}.jpg`)
-
-    try {
-      const res = await axios.get(url, {
-        responseType: 'arraybuffer',
-        timeout: 15000,
-        httpsAgent: agent,
-      })
-
-      fs.writeFileSync(filename, res.data)
-      console.log(`✅ Downloaded (${index + 1}/${urls.length}) → ${filename}`)
-    } catch (err) {
-      console.log(`❌ Failed to download ${url}, retrying...`)
-      try {
-        const res = await axios.get(url, {
-          responseType: 'arraybuffer',
-          timeout: 15000,
-          httpsAgent: agent,
-        })
-        fs.writeFileSync(filename, res.data)
-        console.log(`✅ Retry successful → ${filename}`)
-      } catch {
-        console.log(`⚠️ Could not download ${url}`)
+      for (let attempt = 1; attempt <= 3; attempt++) {
+        try {
+          const res = await axios.get(url, {
+            responseType: 'arraybuffer',
+            timeout: 30000,
+            httpsAgent: agent,
+          })
+          await fs.writeFile(filename, res.data)
+          console.log(`✅ Downloaded (${i + 1}/${urls.length}) → ${filename}`)
+          break
+        } catch (err) {
+          console.log(`❌ Attempt ${attempt} failed for ${url}: ${err.message}`)
+          if (attempt === 3) console.log(`⚠️ Could not download ${url}`)
+          else await new Promise((r) => setTimeout(r, 1000 * attempt))
+        }
       }
     }
   }
 
-  // Split into batches of `concurrent`
-  for (let i = 0; i < urls.length; i += concurrent) {
-    const batch = urls.slice(i, i + concurrent)
-    await Promise.all(batch.map((url, idx) => downloadSingle(url, i + idx)))
-  }
-
+  await Promise.all(Array(concurrency).fill(0).map(worker))
   console.log('✅ ---- All downloads finished!')
 }
