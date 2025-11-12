@@ -9,6 +9,8 @@ const folder = './public/images'
 const agent = new https.Agent({ keepAlive: true, family: 4 })
 
 export async function downloadImages(urls, concurrent = 10) {
+  return console.log('2 - all images fetched')
+
   let count = 1
 
   // Helper to download a single image

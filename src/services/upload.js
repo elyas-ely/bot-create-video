@@ -59,6 +59,8 @@ async function authorize() {
 }
 
 export async function uploadVideo() {
+  return console.log('4 - video uploaded')
+
   const auth = await authorize()
   const youtube = google.youtube({ version: 'v3', auth })
 

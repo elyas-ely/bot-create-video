@@ -8,7 +8,7 @@ serve({
   port: PORT,
   idleTimeout: 0,
   async fetch(req) {
-    if (new URL(req.url).pathname === '/generate') {
+    if (new URL(req.url).pathname === '/') {
       await generateVideoWorkflow()
       return new Response('✅ Video workflow done!')
     }
