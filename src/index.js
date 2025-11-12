@@ -2,7 +2,14 @@ import { serve } from 'bun'
 import { generateVideoWorkflow } from './workflows/generateVideo.js'
 import 'dotenv/config'
 
-const PORT = process.env.PORT || 3010
+const PORT = process.env.PORT || 7426
+
+// Run workflow once when server starts
+generateVideoWorkflow()
+  .then(() => console.log('✅ Video workflow completed on server start'))
+  .catch((err) =>
+    console.error('❌ Video workflow failed on server start', err)
+  )
 
 serve({
   port: PORT,
@@ -10,8 +17,7 @@ serve({
   idleTimeout: 0,
   async fetch(req) {
     if (new URL(req.url).pathname === '/') {
-      await generateVideoWorkflow()
-      return new Response('✅ Video workflow done!')
+      return new Response('✅ Video workflow already ran on server start!')
     }
     return new Response('🚀 Bot is running. Visit /generate to start.', {
       headers: { 'Content-Type': 'text/plain' },
