@@ -5,11 +5,28 @@ import 'dotenv/config'
 const PORT = process.env.PORT || 7426
 
 // Run workflow once when server starts
-generateVideoWorkflow()
-  .then(() => console.log('✅ Video workflow completed on server start'))
-  .catch((err) =>
-    console.error('❌ Video workflow failed on server start', err)
-  )
+async function runWorkflowWithTiming() {
+  const startTime = new Date()
+  console.log(`⏱️ Workflow started at: ${startTime.toLocaleString()}`)
+
+  try {
+    await generateVideoWorkflow()
+    const endTime = new Date()
+    console.log(`✅ Workflow completed at: ${endTime.toLocaleString()}`)
+
+    const durationMs = endTime - startTime
+    const totalMinutes = Math.floor(durationMs / 1000 / 60)
+    const hours = Math.floor(totalMinutes / 60)
+    const minutes = totalMinutes % 60
+
+    console.log(`⏳ Total time taken: ${hours}h ${minutes}m`)
+  } catch (err) {
+    console.error('❌ Workflow failed:', err)
+  }
+}
+
+// Run workflow once on server start
+runWorkflowWithTiming()
 
 serve({
   port: PORT,
