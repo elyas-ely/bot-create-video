@@ -7,7 +7,7 @@ import { pipeline } from 'stream/promises'
 const folder = './public/images'
 const agent = new https.Agent({ keepAlive: true, family: 4 })
 
-export async function downloadImages(urls, concurrency = 10) {
+export async function downloadImages(urls, concurrency = 30) {
   let index = 0 // shared index for workers
 
   const worker = async () => {
