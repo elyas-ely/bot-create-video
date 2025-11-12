@@ -33,7 +33,7 @@ export async function downloadImages(urls, concurrency = 100) {
           await pipeline(res.data, fs.createWriteStream(filename))
           clearTimeout(timeout)
 
-          console.log(`✅ Downloaded (${i + 1}/${urls.length}) → ${filename}`)
+          // console.log(`✅ Downloaded (${i + 1}/${urls.length}) → ${filename}`)
           success = true
           break
         } catch (err) {
