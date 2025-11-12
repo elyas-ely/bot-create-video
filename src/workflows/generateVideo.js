@@ -11,7 +11,7 @@ import {
 
 export async function generateVideoWorkflow() {
   ensureProjectDirectories()
-  const urls = await fetchImageUrls('nature', 120)
+  const urls = await fetchImageUrls('nature', 750)
 
   if (urls.length === 0) {
     console.log('No image URLs fetched')
