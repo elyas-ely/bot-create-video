@@ -16,7 +16,7 @@ export async function downloadImages(urls) {
     for (let attempt = 1; attempt <= 3; attempt++) {
       try {
         const controller = new AbortController()
-        const timeout = setTimeout(() => controller.abort(), 30000) // 30s timeout
+        const timeout = setTimeout(() => controller.abort(), 10000) // 30s timeout
 
         const res = await axios.get(url, {
           responseType: 'stream',
