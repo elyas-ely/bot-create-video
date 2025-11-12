@@ -8,7 +8,7 @@ if (!ACCESS_KEY) {
 const perPage = 30
 
 export async function fetchImageUrls(query, totalImages) {
-  return console.log('1 - urls fetched')
+  // return console.log('1 - urls fetched')
 
   let urls = []
   let page = 1
