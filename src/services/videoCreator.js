@@ -8,6 +8,9 @@ export async function createVideoFromImages() {
   await checkFFmpeg()
 
   const chunkFiles = await createAllChunks()
+
+  console.log('⏳ Waiting 10 minutes before joining chunks...')
+  await Bun.sleep(10 * 60 * 1000) // 10 minutes
   const finalVideoPath = await joinChunksWithMusic(chunkFiles)
 
   return finalVideoPath
