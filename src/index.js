@@ -15,11 +15,17 @@ async function runWorkflowWithTiming() {
     console.log(`✅ Workflow completed at: ${endTime.toLocaleString()}`)
 
     const durationMs = endTime - startTime
-    const totalMinutes = Math.floor(durationMs / 1000 / 60)
-    const hours = Math.floor(totalMinutes / 60)
-    const minutes = totalMinutes % 60
+    const totalSeconds = Math.floor(durationMs / 1000)
+    const hours = Math.floor(totalSeconds / 3600)
+    const minutes = Math.floor((totalSeconds % 3600) / 60)
+    const seconds = totalSeconds % 60
 
-    console.log(`⏳ Total time taken: ${hours}h ${minutes}m`)
+    let timeString = ''
+    if (hours > 0) timeString += `${hours}h `
+    if (minutes > 0 || hours > 0) timeString += `${minutes}m `
+    timeString += `${seconds}s`
+
+    console.log(`⏳ Total time taken: ${timeString}`)
   } catch (err) {
     console.error('❌ Workflow failed:', err)
   }

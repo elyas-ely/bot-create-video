@@ -11,22 +11,22 @@ import {
 
 export async function generateVideoWorkflow() {
   ensureProjectDirectories()
-  // const urls = await fetchImageUrls('nature', 4)
+  const urls = await fetchImageUrls('nature', 750)
 
-  // if (urls.length === 0) {
-  //   console.log('No image URLs fetched')
-  //   return
-  // }
+  if (urls.length === 0) {
+    console.log('No image URLs fetched')
+    return
+  }
 
   try {
-    // await downloadImages(urls)
+    await downloadImages(urls)
     await createVideoFromImages()
-    // await uploadVideo()
+    await uploadVideo()
   } catch (error) {
     console.error('Error generating video:', error)
   } finally {
-    // emptyChunksFolder()
-    // emptyImagesFolder()
-    // emptyFinalFolder()
+    emptyChunksFolder()
+    emptyImagesFolder()
+    emptyFinalFolder()
   }
 }
