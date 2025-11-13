@@ -11,15 +11,15 @@ import {
 
 export async function generateVideoWorkflow() {
   ensureProjectDirectories()
-  const urls = await fetchImageUrls('nature', 1)
+  // const urls = await fetchImageUrls('nature', 4)
 
-  if (urls.length === 0) {
-    console.log('No image URLs fetched')
-    return
-  }
+  // if (urls.length === 0) {
+  //   console.log('No image URLs fetched')
+  //   return
+  // }
 
   try {
-    await downloadImages(urls)
+    // await downloadImages(urls)
     await createVideoFromImages()
     // await uploadVideo()
   } catch (error) {
