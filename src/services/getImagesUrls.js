@@ -30,7 +30,7 @@ export async function fetchImageUrls(query, totalImages) {
       })
 
       if (!res.data.results.length) {
-        console.log(`⚠️ Page ${randomPage} returned 0 images, retrying...`)
+        // console.log(`⚠️ Page ${randomPage} returned 0 images, retrying...`)
         continue
       }
 
@@ -63,6 +63,6 @@ export async function fetchImageUrls(query, totalImages) {
     }
   }
 
-  console.log(`🔗 FULL HD images fetched (unique): ${urls.length}`)
+  console.log(`🔗 FULL HD images urls (unique): ${urls.length}`)
   return urls
 }

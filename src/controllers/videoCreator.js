@@ -24,7 +24,6 @@ export async function createVideoFromImages() {
       await Bun.sleep(60 * 1000)
     }
 
-    console.log('🎵 Joining chunks with music...')
     const finalVideoPath = await joinChunksWithMusic(chunks)
 
     return finalVideoPath

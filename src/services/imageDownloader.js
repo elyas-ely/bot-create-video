@@ -37,13 +37,15 @@ export async function downloadImages(urls, concurrency = 100) {
           success = true
           break
         } catch (err) {
-          console.log(`❌ Attempt ${attempt} failed for ${url}: ${err.message}`)
+          // console.log(`❌ Attempt ${attempt} failed for ${url}: ${err.message}`)
           if (attempt < 3)
             await new Promise((r) => setTimeout(r, 1000 * attempt))
         }
       }
 
-      if (!success) console.log(`⚠️ Could not download ${url}, skipping...`)
+      if (!success) {
+        // console.log(`⚠️ Could not download ${url}, skipping...`)
+      }
     }
   }
 

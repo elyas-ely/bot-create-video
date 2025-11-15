@@ -5,14 +5,13 @@ import { exec } from 'child_process'
 
 const execAsync = promisify(exec)
 const FFMPEG = 'ffmpeg'
-const BATCH_SIZE = 5 // Number of chunks per batch
-const CHUNK_DURATION = 5 // seconds
-const FADE_DURATION = 0.5 // shorter fade for low-spec VPS
+const BATCH_SIZE = 5
+const CHUNK_DURATION = 5
+const FADE_DURATION = 0.5
 
 async function runFFmpeg(cmd) {
   try {
     const { stdout, stderr } = await execAsync(cmd)
-    // if (stderr) console.log(stderr)
     return stdout
   } catch (err) {
     console.error('❌ FFmpeg error:', err.message)
@@ -29,7 +28,8 @@ function chunkArray(arr, size) {
 }
 
 async function mergeBatch(batchFiles, batchIndex, tempDir) {
-  // Sort files numerically
+  console.log(`🔄 Starting batch ${batchIndex}...`)
+
   batchFiles.sort((a, b) => {
     const numA = parseInt(a.match(/chunk_(\d+)/)?.[1] || '0')
     const numB = parseInt(b.match(/chunk_(\d+)/)?.[1] || '0')
@@ -38,10 +38,10 @@ async function mergeBatch(batchFiles, batchIndex, tempDir) {
 
   const inputs = batchFiles.map((f) => `-i "${f}"`).join(' ')
 
-  // Build xfade filters
   let filter = ''
   let lastStream = '[0:v]'
   let offset = CHUNK_DURATION - FADE_DURATION
+
   for (let i = 1; i < batchFiles.length; i++) {
     const outStream = `[v${i}]`
     filter += `${lastStream}[${i}:v]xfade=transition=fade:duration=${FADE_DURATION}:offset=${offset}${outStream};`
@@ -53,8 +53,11 @@ async function mergeBatch(batchFiles, batchIndex, tempDir) {
 
   const batchOutput = path.join(tempDir, `batch_${batchIndex}.mp4`)
   const cmd = `${FFMPEG} -y ${inputs} -filter_complex "${filter}" -map "[vid]" -c:v libx264 -preset veryfast -crf 23 "${batchOutput}"`
-  // console.log(`🎬 Processing batch ${batchIndex}...`)
+
+  console.log(`🎬 FFmpeg merging batch ${batchIndex}...`)
   await runFFmpeg(cmd)
+
+  console.log(`✅ Batch ${batchIndex} completed`)
   return batchOutput
 }
 
@@ -66,16 +69,22 @@ export async function joinChunksWithMusic(
   const tempDir = path.join(path.dirname(output), 'temp_batches')
   if (!fs.existsSync(tempDir)) fs.mkdirSync(tempDir, { recursive: true })
 
-  // Split into batches
+  console.log(`📁 Preparing batches...`)
+
   const batches = chunkArray(chunkFiles, BATCH_SIZE)
+  const totalBatches = batches.length
   const batchOutputs = []
 
   for (let i = 0; i < batches.length; i++) {
+    const percent = (((i + 1) / totalBatches) * 100).toFixed(1)
+    console.log(`📦 Processing batch ${i + 1}/${totalBatches} (${percent}%)`)
+
     const batchOutput = await mergeBatch(batches[i], i, tempDir)
     batchOutputs.push(batchOutput)
   }
 
-  // Merge all batch outputs without xfade (optional: you can apply minimal crossfade here)
+  console.log(`🔗 All batches processed. Preparing final merge...`)
+
   const listFile = path.join(tempDir, 'batch_list.txt')
   fs.writeFileSync(
     listFile,
@@ -84,17 +93,18 @@ export async function joinChunksWithMusic(
 
   const intermediateOutput = path.join(tempDir, 'merged_batches.mp4')
   const concatCmd = `${FFMPEG} -y -f concat -safe 0 -i "${listFile}" -c copy "${intermediateOutput}"`
-  // console.log('🎬 Concatenating all batches...')
+
+  console.log(`⏳ Concatenating all batches (90%)...`)
   await runFFmpeg(concatCmd)
 
-  // Add audio using stream_loop
   const finalAudioCmd = `${FFMPEG} -y -i "${intermediateOutput}" -stream_loop -1 -i "${audioFile}" -c:v copy -c:a aac -b:a 192k -shortest "${path.resolve(output)}"`
-  // console.log('🎵 Adding music...')
+
+  console.log(`🎵 Adding music (95%)...`)
   await runFFmpeg(finalAudioCmd)
 
-  // Clean up temporary files
   fs.rmSync(tempDir, { recursive: true, force: true })
 
-  console.log(`✅ Final video ready → ${output}`)
+  console.log(`🎉 100% COMPLETED → Final video ready at: ${output}`)
+
   return output
 }
