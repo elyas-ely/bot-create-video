@@ -17,6 +17,6 @@ export async function createVideoChunk(
   const outputFile = path.join(chunkFolder, `chunk_${index}.mp4`)
   const cmd = `${FFMPEG} -y -loop 1 -i "${imagePath}" -t ${CHUNK_DURATION} -vf "scale=-1:1080:force_original_aspect_ratio=decrease,pad=1920:1080:(ow-iw)/2:(oh-ih)/2:black,format=yuv420p" -c:v libx264 -preset veryfast -crf 23 -an "${outputFile}"`
   await execAsync(cmd)
-  console.log(`✅ Chunk #${index} created`)
+  console.log(`🎬 Chunk #${index} created`)
   return outputFile
 }

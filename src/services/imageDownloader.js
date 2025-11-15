@@ -53,5 +53,5 @@ export async function downloadImages(urls, concurrency = 100) {
       .fill(0)
       .map(() => worker())
   )
-  console.log('✅ ---- All downloads finished!')
+  console.log('📸 ---- All downloads finished!')
 }

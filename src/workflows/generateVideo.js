@@ -1,4 +1,4 @@
-import { createVideoFromImages } from '../services/videoCreator.js'
+import { createVideoFromImages } from '../controllers/videoCreator.js'
 import { fetchImageUrls } from '../services/getImagesUrls.js'
 import { downloadImages } from '../services/imageDownloader.js'
 import { uploadVideo } from '../services/upload.js'
@@ -14,7 +14,7 @@ export async function generateVideoWorkflow() {
   emptyChunksFolder()
   emptyImagesFolder()
   emptyFinalFolder()
-  const urls = await fetchImageUrls('nature', 750)
+  const urls = await fetchImageUrls('nature', 2)
 
   if (urls.length === 0) {
     console.log('No image URLs fetched')

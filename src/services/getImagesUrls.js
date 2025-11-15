@@ -36,6 +36,6 @@ export async function fetchImageUrls(query, totalImages) {
 
     page++
   }
-  console.log('✅ ---- Image URLs fetched:', urls.length)
+  console.log('🔗 ---- Image URLs fetched:', urls.length)
   return urls
 }
