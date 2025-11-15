@@ -14,15 +14,15 @@ export async function createVideoFromImages() {
     }
 
     // Optional: Log countdown while waiting
-    const waitMinutes = 5
-    console.log(
-      `⏳ Cooling down for ${waitMinutes} minutes before joining chunks...`
-    )
+    // const waitMinutes = 5
+    // console.log(
+    //   `⏳ Cooling down for ${waitMinutes} minutes before joining chunks...`
+    // )
 
-    for (let i = waitMinutes; i > 0; i--) {
-      console.log(`⏳ ${i} minute(s) remaining...`)
-      await Bun.sleep(60 * 1000)
-    }
+    // for (let i = waitMinutes; i > 0; i--) {
+    //   console.log(`⏳ ${i} minute(s) remaining...`)
+    //   await Bun.sleep(60 * 1000)
+    // }
 
     console.log('🎵 Joining chunks with music...')
     const finalVideoPath = await joinChunksWithMusic(chunks)

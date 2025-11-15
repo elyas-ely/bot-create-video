@@ -14,7 +14,7 @@ export async function generateVideoWorkflow() {
   emptyChunksFolder()
   emptyImagesFolder()
   emptyFinalFolder()
-  const urls = await fetchImageUrls('nature', 2)
+  const urls = await fetchImageUrls('nature', 10)
 
   if (urls.length === 0) {
     console.log('No image URLs fetched')
@@ -24,12 +24,12 @@ export async function generateVideoWorkflow() {
   try {
     await downloadImages(urls)
     await createVideoFromImages()
-    await uploadVideo()
+    // await uploadVideo()
   } catch (error) {
     console.error('Error generating video:', error)
   } finally {
-    emptyChunksFolder()
-    emptyImagesFolder()
-    emptyFinalFolder()
+    // emptyChunksFolder()
+    // emptyImagesFolder()
+    // emptyFinalFolder()
   }
 }
