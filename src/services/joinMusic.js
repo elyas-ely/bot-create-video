@@ -12,7 +12,7 @@ const FADE_DURATION = 0.5 // shorter fade for low-spec VPS
 async function runFFmpeg(cmd) {
   try {
     const { stdout, stderr } = await execAsync(cmd)
-    if (stderr) console.log(stderr)
+    // if (stderr) console.log(stderr)
     return stdout
   } catch (err) {
     console.error('❌ FFmpeg error:', err.message)
@@ -53,7 +53,7 @@ async function mergeBatch(batchFiles, batchIndex, tempDir) {
 
   const batchOutput = path.join(tempDir, `batch_${batchIndex}.mp4`)
   const cmd = `${FFMPEG} -y ${inputs} -filter_complex "${filter}" -map "[vid]" -c:v libx264 -preset veryfast -crf 23 "${batchOutput}"`
-  console.log(`🎬 Processing batch ${batchIndex}...`)
+  // console.log(`🎬 Processing batch ${batchIndex}...`)
   await runFFmpeg(cmd)
   return batchOutput
 }
@@ -84,12 +84,12 @@ export async function joinChunksWithMusic(
 
   const intermediateOutput = path.join(tempDir, 'merged_batches.mp4')
   const concatCmd = `${FFMPEG} -y -f concat -safe 0 -i "${listFile}" -c copy "${intermediateOutput}"`
-  console.log('🎬 Concatenating all batches...')
+  // console.log('🎬 Concatenating all batches...')
   await runFFmpeg(concatCmd)
 
   // Add audio using stream_loop
   const finalAudioCmd = `${FFMPEG} -y -i "${intermediateOutput}" -stream_loop -1 -i "${audioFile}" -c:v copy -c:a aac -b:a 192k -shortest "${path.resolve(output)}"`
-  console.log('🎵 Adding music...')
+  // console.log('🎵 Adding music...')
   await runFFmpeg(finalAudioCmd)
 
   // Clean up temporary files
